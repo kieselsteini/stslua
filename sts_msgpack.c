@@ -41,7 +41,7 @@
 
 
 #define MSGPACK_AUTHOR      "Sebastian Steinhauer <s.steinhauer@yahoo.de>"
-#define MSGPACK_VERSION     "1.0.0"
+#define MSGPACK_VERSION     "1.0.1"
 
 
 typedef struct msg_t {
@@ -60,19 +60,36 @@ typedef struct msg_t {
 
 
 static int valid_utf8(const uint8_t *str, size_t length) {
+    static const uint8_t    table[256] = {
+        /* 0x00 - 0x7f -> ASCII */
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /* 0x80 - 0xbf -> continuation bytes */
+        8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+        8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+        8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+        8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
+        /* 0xc0 - 0xdf -> 2 byte encodings */
+        9, 9, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        /* 0xe0 - 0xef -> 3 byte encodings */
+        2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        /* 0xf0 - 0xff -> 4 byte encodings */
+        3, 3, 3, 3, 3, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9
+    };
     while (length > 0) {
-        uint8_t code = *str++; --length;
-        if (code & 0x80) {
-            size_t followers;
-            for (followers = 0; code & 0x40; ++followers)
-                code <<= 1;
-            if (followers > length)
+        size_t code = table[*str++]; --length;
+        if ((code > 3) || (code > length))
+            return 0;
+        for (; code > 0; --code, --length, ++str)
+            if (table[*str] != 8)
                 return 0;
-            for (; followers > 0; --followers, --length) {
-                if ((*str++ & 0xc0) != 0x80)
-                    return 0;
-            }
-        }
     }
     return 1;
 }
