@@ -50,24 +50,18 @@ static int f_encode(lua_State *L) {
     const uint8_t *data = (const uint8_t*)luaL_checklstring(L, 1, &length);
 
     luaL_buffinit(L, &buffer);
-
     for (value = bits = 0, written = 0; length > 0; --length, ++data) {
         value = (value << 8) | *data; bits += 8;
-        for (; bits >= 6; bits -= 6) {
+        for (; bits >= 6; bits -= 6, ++written)
             luaL_addchar(&buffer, table[(value >> (bits - 6)) & 63]);
-            ++written;
-        }
     }
     if (bits > 0) {
         value <<= 8; bits += 8;
         luaL_addchar(&buffer, table[(value >> (bits - 6)) & 63]);
         ++written;
     }
-    while (written % 4) {
+    for (; (written % 4) != 0; ++written)
         luaL_addchar(&buffer, '=');
-        ++written;
-    }
-
     luaL_pushresult(&buffer);
     return 1;
 }
