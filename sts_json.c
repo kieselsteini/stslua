@@ -41,7 +41,7 @@
 
 
 #define JSON_AUTHOR         "Sebastian Steinhauer <s.steinhauer@yahoo.de>"
-#define JSON_VERSION        "0.1.0"
+#define JSON_VERSION        "0.2.0"
 
 
 typedef struct json_t {
@@ -52,7 +52,7 @@ typedef struct json_t {
     const char              *input;
 
     /* encoder variables */
-    char                    output[8];
+    char                    output[1024 * 16];
     size_t                  position;
     int                     table, index;
 } json_t;

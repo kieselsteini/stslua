@@ -92,6 +92,8 @@ Return the Lua value or *nil* plus an error message when failed.
 Number conversion uses Lua functions. As JSON number format is similar to Lua it was the easiest option. This causes some memory overhead as temporary Lua strings will be generated.
 
 ### History
+- **0.2.0**
+    - fixed output buffer size
 - **0.1.0**
     - WIP version, not much tested
 
