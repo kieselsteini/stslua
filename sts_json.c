@@ -41,7 +41,7 @@
 
 
 #define JSON_AUTHOR         "Sebastian Steinhauer <s.steinhauer@yahoo.de>"
-#define JSON_VERSION        "1.0.0"
+#define JSON_VERSION        "0.1.0"
 
 
 typedef struct json_t {
@@ -152,7 +152,7 @@ static void decode_number(json_t *json) {
                 goto push_number;
         }
     }
-    
+
 push_number:
     /* let Lua do the work :) */
     lua_pushlstring(json->L, buffer, i);

@@ -9,6 +9,7 @@
 | File | Version | Description |
 | --- | :---: | --- |
 | sts_base64.c | 1.0.0 | Base64 encoder/decoder |
+| sts_json.c | *WIP* | JSON encoder/decoder |
 | sts_msgpack.c | 1.0.1 | MessagePack encoder/decoder |
 | test.c | - | Creates a Lua state, load all the modules and execute ```test.lua``` |
 
@@ -49,6 +50,50 @@ Nothing special. Heavy use of ```luaL_Buffer```.
 #### History
 - **1.0.0**
     - initial version
+
+
+## sts_json.c
+JSON format encoder/decoder.
+**This is still work in progress.**
+
+
+| Lua type | JSON type | Notes |
+| --- | --- | --- |
+| nil | ``null`` |  - |
+| boolean | ``true`` / ``false`` | - |
+| number | number | - |
+| string | string | will quote several characters |
+| table | array | when it is a proper Lua array |
+| table | object | JSON supports only string keys |
+
+
+### Example
+```lua
+local json = require('json')
+
+local body = assert(json.encode({ integer = 100, number = math.pi, string = 'Hello World!', array = [1, 2, 3], obj = { foo = 'bar' }}))
+local data = assert(json.decode(body))
+```
+
+### API
+#### json.encode(value)
+Encode the given Lua value to a JSON string.
+
+Returns the JSON string on success or *nil* plus an error message when failed.
+
+Note that the resulting JSON string is not prettified and has no whitespaces.
+
+#### json.decode(json_string)
+Decode the given *json_string* to a Lua value.
+
+Return the Lua value or *nil* plus an error message when failed.
+
+### Implementation Details
+Number conversion uses Lua functions. As JSON number format is similar to Lua it was the easiest option. This causes some memory overhead as temporary Lua strings will be generated.
+
+### History
+- **0.1.0**
+    - WIP version, not much tested
 
 
 ## sts_msgpack.c
