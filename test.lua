@@ -1,9 +1,7 @@
-local base64 = require('base64')
-local msgpack = require('msgpack')
-
-
 --------------------------------------------------------------------------------
 local function base64_test()
+    local base64 = require('base64')
+
     -- simple test
     do
         local str = 'light work'
@@ -31,6 +29,8 @@ end
 
 --------------------------------------------------------------------------------
 local function msgpack_test()
+    local msgpack = require('msgpack')
+
     -- simple test
     do
         local values = { true, false, 1, 128, -1, math.pi, 2.5, 'Hello äÖü ß 😀 valid UTF-8' }
@@ -82,5 +82,16 @@ end
 
 
 --------------------------------------------------------------------------------
+local function json_test()
+    local json = require('json')
+    print(assert(json.encode({int = 1, pi = math.pi, str = 'Hello World!', array = {1,2,3}, obj = { test = 'Test!'}})))
+    for k,v in pairs(assert(json.decode('{"str":"Hello World!","obj":{"test":"Test!"},"int":1,"pi":3.1415926535898,"array":[1,2,3]}'))) do
+        print(k, v)
+    end
+end
+
+
+--------------------------------------------------------------------------------
 base64_test()
 msgpack_test()
+json_test()

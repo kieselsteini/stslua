@@ -38,8 +38,9 @@
 #include "lualib.h"
 
 
-LUALIB_API int luaopen_msgpack(lua_State *L);
 LUALIB_API int luaopen_base64(lua_State *L);
+LUALIB_API int luaopen_json(lua_State *L);
+LUALIB_API int luaopen_msgpack(lua_State *L);
 
 
 static int run_code(lua_State *L) {
@@ -57,8 +58,9 @@ int main() {
     luaL_openlibs(L);
 
     luaL_requiref(L, "base64", luaopen_base64, 1);
+    luaL_requiref(L, "json", luaopen_json, 1);
     luaL_requiref(L, "msgpack", luaopen_msgpack, 1);
-    lua_pop(L, 2);
+    lua_pop(L, 3);
 
     lua_getglobal(L, "debug");
     lua_getfield(L, -1, "traceback");

@@ -1,6 +1,6 @@
 CC=cc -std=c99 -Wall -Wextra
 LIB=-llua
-OBJ=sts_base64.o sts_msgpack.o test.o
+OBJ=sts_base64.o sts_json.o sts_msgpack.o test.o
 BIN=sts_test
 
 default: $(OBJ)
