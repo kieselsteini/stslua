@@ -159,6 +159,8 @@ The decoder works pretty straight forward and ensures by calling ```luaL_checkst
 The encoder uses an internal buffer of 16KiB to store the binary values. If this internal buffer is full, it will append the contents as a Lua string to a table. At the end it will use the ```luaL_Buffer``` mechanics to "concat" the table of binary strings.
 
 ### History
+- **1.0.2**
+    - removed superflous code line in encoder (flushing the buffer)
 - **1.0.1**
     - improved UTF-8 validation (overlong encodings are still not recognized)
 - **1.0.0**

@@ -41,7 +41,7 @@
 
 
 #define MSGPACK_AUTHOR      "Sebastian Steinhauer <s.steinhauer@yahoo.de>"
-#define MSGPACK_VERSION     "1.0.1"
+#define MSGPACK_VERSION     "1.0.2"
 
 
 typedef struct msg_t {
@@ -127,7 +127,6 @@ static void msg_flush(msg_t *msg) {
         lua_pushlstring(msg->L, (const char*)msg->buffer, msg->position);
         lua_rawseti(msg->L, msg->table, msg->index++);
         msg->position = 0;
-        ++msg->index;
     }
 }
 
