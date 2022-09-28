@@ -10,7 +10,7 @@
 | --- | :---: | --- |
 | sts_base64.c | 1.0.0 | Base64 encoder/decoder |
 | sts_json.c | *WIP* | JSON encoder/decoder |
-| sts_msgpack.c | 1.0.1 | MessagePack encoder/decoder |
+| sts_msgpack.c | 1.0.2 | MessagePack encoder/decoder |
 | test.c | - | Creates a Lua state, load all the modules and execute ```test.lua``` |
 
 
